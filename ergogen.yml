@@ -1,0 +1,127 @@
+# Based off Reviung41 example
+units:
+  # `U` is a predefined unit of measure that means 19.05mm, which is MX spacing
+  angle: -15
+  $default_width: u
+  $default_height: u
+  $default_spread: U
+  $default_padding: U
+points:
+  mirror: &mirror
+    ref: matrix_inner_bottom
+    shift: [0, -U]
+    distance: 4.25U
+  zones:
+    matrix:
+      rotate: angle
+      columns:
+        outer:
+          key:
+            column_net: P4
+            mirror.column_net: P9
+        pinky:
+          key:
+            stagger: 0.25U
+            column_net: P5
+            mirror.column_net: P8
+        ring:
+          key:
+            stagger: 0.25U
+            column_net: P6
+            mirror.column_net: P7
+        middle:
+          key:
+            stagger: 0.25U
+            column_net: P7
+            mirror.column_net: P6
+          rows:
+            mods.skip: true
+        index:
+          key:
+            stagger: -0.25U
+            column_net: P8
+            mirror.column_net: P5
+          rows:
+            mods.skip: true
+        inner:
+          key:
+            stagger: -0.25U
+            column_net: P9
+            mirror.column_net: P4
+          rows:
+            mods.skip: true
+        encoder:
+          key:
+            spread: 1.1U
+            column_net: P10
+            mirror.column_net: P3
+          rows:
+            mods.skip: true
+            home.skip: true
+            top.skip: true
+      rows:
+        mods:
+          key:
+            padding: U
+            row_net: P21
+            mirror.row_net: P18
+        bottom:
+          key:
+            padding: U
+            row_net: P21
+            mirror.row_net: P18
+        home:
+          key:
+            padding: U
+            row_net: P20
+            mirror.row_net: P15
+        top:
+          key:
+            padding: U
+            row_net: P19
+            mirror.row_net: P14
+    thumb:
+      anchor:
+        ref: matrix_index_bottom
+        shift: [-0.9U, -1.1U]
+        rotate: -10
+      columns:
+        close:
+          key:
+            name: thumb_close
+        mid:
+          key:
+            name: thumb_mid
+            spread: (1.25u+1u)/2
+            width: 1.25u
+        far:
+          key:
+            name: thumb_far
+            spread: (2u+1.25u)/2
+            width: 2u
+pcbs:
+  untitled:
+    footprints:
+      keys:
+        what: mx
+        where: true
+        params:
+          from: "{{row_net}}"
+          to: "{{column_net}}"
+          keycaps: true
+      diodes:
+        what: diode
+        where: true
+        adjust:
+          shift: [0, -4.7]
+        params:
+          from: "{{row_net}}"
+          to: "{{colrow}}"
+      mcu:
+        what: promicro
+        where:
+          aggregate.parts:
+            - ref: matrix_inner_top
+            - ref: mirror_matrix_inner_top
+          shift: [0, 22]
+          rotate: angle
